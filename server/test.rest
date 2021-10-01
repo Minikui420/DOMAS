@@ -1,0 +1,74 @@
+
+### Users ###
+
+POST http://0.0.0.0:5000/signup
+Content-Type: application/json
+
+{
+    "username": "domas",
+    "email": "domas@gmail.com",
+    "password": "123qwe"
+}
+
+
+###
+
+
+POST http://0.0.0.0:5000/login
+Content-Type: application/json
+
+{
+    "email": "muhaimin@gmail.com",
+    "password": "123qwe"
+}
+
+###
+
+
+GET http://0.0.0.0:5000/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNzkxNTRmLTFhMmQtNGE5ZS05NDFjLWQyOWIwODI2ZmNjNyIsInVzZXJuYW1lIjoibXVoYWltaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTA5LTMwVDEyOjAwOjEyLjY0NVoiLCJpYXQiOjE2MzMwNzY5ODAsImV4cCI6MTYzMzA3NzA0MH0.j4os6HxJRVIUq4-d1qreV3Z0hOR830kRKuXTkpXpdYA
+
+###
+
+POST http://0.0.0.0:5000/token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNzkxNTRmLTFhMmQtNGE5ZS05NDFjLWQyOWIwODI2ZmNjNyIsInVzZXJuYW1lIjoibXVoYWltaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTA5LTMwVDEyOjAwOjEyLjY0NVoiLCJpYXQiOjE2MzMwNzI2NDcsImV4cCI6MTYzMzY3NzQ0N30.0fZRKi1qafIOzwJrn_2MfUbaZLXodlR56J0htULw_dI"
+}
+
+### Resident ###
+
+
+GET http://0.0.0.0:5000/resident?id=55dbae92-f210-4ceb-9226-64b0b83d22d7
+
+
+###
+
+
+POST http://0.0.0.0:5000/resident/add
+Content-Type: application/json
+
+{
+    "familyId": "124",
+    "nik": "124",
+    "name": "MUHAIMIN",
+    "place_dateOfBirth": "SERANG, 28-02-1995",
+    "gender": "L",
+    "bloodType": "AB",
+    "rt": "009",
+    "rw": "003",
+    "maritalStatus": "BELUM KAWIN",
+    "profession": "BELUM/TIDAK BEKERJA"
+}
+
+
+###
+
+
+PUT http://0.0.0.0:5000/resident/edit?id=55dbae92-f210-4ceb-9226-64b0b83d22d7
+Content-Type: application/json
+
+{
+    "nik": "0001"
+}

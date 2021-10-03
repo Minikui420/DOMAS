@@ -8,7 +8,8 @@ export default class Api {
         baseURL: process.env.REACT_APP_BASE_URL,
         headers: {
             "Conttent-Type": "application/json"
-        }
+        },
+        withCredentials: true
     })
 
     constructor(req: Req){ 

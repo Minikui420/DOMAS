@@ -1,4 +1,4 @@
-import { Middleware, Req } from "@tsed/common"
+import { Middleware, Req, Res } from "@tsed/common"
 import { Unauthorized } from "@tsed/exceptions"
 import { verify } from "jsonwebtoken"
 import { SECRET_KEY } from "src/config/env"
@@ -17,5 +17,15 @@ export class IsAuth {
             }
             req.query.id = res.id
         })
+    }
+}
+
+@Middleware()
+export class SetCookies {
+    use(@Res() res: Res){
+        res.cookie('userdata', 'MANTAP!', { 
+            path: '/home',
+            sameSite: 'lax'
+         })
     }
 }

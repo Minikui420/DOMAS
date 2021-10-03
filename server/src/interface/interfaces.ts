@@ -3,6 +3,7 @@ export interface Token {
     id?: string
     token?: string,
     refreshToken?: string
+    picture?: string
 }
 
 export interface UserData extends Token {

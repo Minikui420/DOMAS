@@ -27,7 +27,7 @@ export class Residents {
     @Put('/edit')
     edit(@QueryParams() data: Result, @BodyParams() params: Resident): Promise<Resident> {
         const { id } = data
-        params.uuid = id
+        params.id = id!
         return this.residentService.editResident(params)
     }
 

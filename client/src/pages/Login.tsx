@@ -25,13 +25,20 @@ class Login extends Component<Props, State> {
     }
 
     submit = async () => {
-        const api = new Api(this.state)
-        const userData: UserData = await api.post('/login')
+        
+        try {
 
-        if(userData){
-            this.props.setUserDataToken(userData)
-            this.props.setIsLogin()
+            const api = new Api(this.state)
+            const userData: UserData = await api.post('/login')
+            const { id, username, picture, createdAt, token, refreshToken } = userData
+            this.props.setUserDataLogin({ id, username, picture, createdAt })
+            this.props.setUserDataToken({ token, refreshToken })
+            this.props.setIsLogin(true)
             this.props.history.push('/home')
+            
+        } catch (error) {
+            console.log(`${error}`)
+            alert(error)
         }
     }
 

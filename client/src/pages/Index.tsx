@@ -1,5 +1,7 @@
 import { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { mapStateToProps, mapDispatchToProps } from '../app/functions'
 import { Props } from '../interface/Interfaces'
 import { Container, Jumbotron } from 'react-bootstrap'
 import Navigation from '../components/header/Navigation'
@@ -24,4 +26,4 @@ class Index extends Component<Props> {
     }
 }
 
-export default withRouter(Index)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index))

@@ -1,15 +1,15 @@
 import {
-    Entity, CreateDateColumn, PrimaryColumn,
-    UpdateDateColumn, BeforeInsert
+    Entity, CreateDateColumn, UpdateDateColumn, 
+    BeforeInsert, PrimaryGeneratedColumn, BaseEntity
 } from "typeorm"
 
 import { v4 as uuid } from 'uuid'
 
 
 @Entity()
-export class Model {
+export class Model extends BaseEntity {
 
-    @PrimaryColumn({ type: 'uuid' })
+    @PrimaryGeneratedColumn('uuid')
     id: string
 
     @CreateDateColumn()

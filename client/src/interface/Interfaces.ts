@@ -3,32 +3,18 @@ import { RouteComponentProps } from 'react-router-dom'
 import { WebStorage } from 'reduxjs-toolkit-persist/es/types'
 
 
-
 export interface PersistConfig {
     key: string
     storage: WebStorage
 }
 
-export interface Props extends RouteComponentProps<any> {
-    persist?: any
-    temporer?: any
-    setUserDataLogin?: any
-    setUserDataToken?: any
-    setIsLogin?: any
+export interface Props extends StateToProps, DispatchToProps, RouteComponentProps<any> {
+    
 }
 
 export interface State {
     email?: string
     password?: string
-}
-
-export interface User extends State {
-    id?: string
-    username?: string
-}
-
-export interface Req extends User, State {
-    token?: string
 }
 
 export interface Path {
@@ -39,25 +25,41 @@ export interface Path {
     profil?: string
 }
 
-export interface UserData {
-    dataLogin: {
-        admin: boolean
-        createdAt: string
-        email: string
-        id: string
-    }
-    dataToken: {
-        token?: string
-        refresh?: string
-    }
+export interface User extends State {
+    id?: string
+    username?: string
+    createdAt?: string
+    updatedAt?: string
+}
+
+export interface UserToken {
+    token?: string
+    refreshToken?: string
+}
+
+export interface Req extends User, State {
+    token?: string
+}
+
+export interface UserData extends User, UserToken {
+    admin?: boolean
+    picture?: string
     errors?: any
 }
 
+export interface StoreData {
+    isLogin: boolean
+    dataLogin: UserData
+    dataToken: UserToken
+}
+
 export interface StateToProps {
-    persist?: any
-    temporer?: any
+    persist: StoreData
+    temporer: StoreData
 }
 
 export interface DispatchToProps {
-    
+    setUserDataLogin(args: UserData): UserData
+    setUserDataToken(args: UserToken): UserToken
+    setIsLogin(args: boolean): boolean
 }

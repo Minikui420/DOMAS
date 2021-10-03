@@ -42,6 +42,7 @@ export const ClientRequest = () => {
 
                     //Users
                     case 'getUser':
+                        console.log(data)
                         return getUser(data)
 
                     case 'create':

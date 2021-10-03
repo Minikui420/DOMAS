@@ -1,31 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { UserData } from '../interface/Interfaces'
+import { UserData, UserToken } from '../interface/Interfaces'
 
 export const hook = createSlice({
+
     name: 'domasApp',
     initialState: {
+
         dataToken: {
             token: '',
-            refresh: ''
-        } as UserData['dataToken'],
+            refreshToken: ''
+        } as UserToken,
+
         dataLogin: {
             id: '',
             admin: false,
             email: '',
             username: '',
             createdAt: ''
-        } as UserData['dataLogin'],
+        } as UserData,
+
         isLogin: false
     },
     reducers: {
         setUserDataToken: (state, actio) => {
-            state.dataToken = actio.payload as UserData['dataToken']
+            state.dataToken = actio.payload as UserToken
         },
         setUserDataLogin: (state, action) => {
-            state.dataLogin = action.payload as UserData['dataLogin']
+            state.dataLogin = action.payload as UserData
         },
-        setIsLogin: state => {
-            state.isLogin = !state.isLogin
+        setIsLogin: (state, action) => {
+            state.isLogin = action.payload as boolean
         }
     }
 })

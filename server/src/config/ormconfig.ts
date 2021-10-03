@@ -17,7 +17,7 @@ const ormconfig: ConnectionOptions = {
     host: DB_HOST,
     port: DB_PORT as unknown as number,
     logging: true,
-    synchronize: false,
+    synchronize: true,
 
     entities: [`src/entity/*.{ts,js}`], // `${rootDir}/entity/*.{ts,js}`
     migrations: [`src/migrations/*.{ts,js}`],

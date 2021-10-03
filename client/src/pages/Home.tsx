@@ -4,29 +4,16 @@ import { Component } from 'react'
 import { withRouter } from 'react-router'
 import { mapStateToProps, mapDispatchToProps } from '../app/functions'
 import Navigation from '../components/header/Navigation'
-import Api from '../api/Api'
+// import Api from '../api/Api'
 
 
 class Home extends Component<Props, State> {
 
-
     componentDidMount = async () => {
-        
-        const { token, refresh } = this.props.persist.dataToken
-        const api = new Api({ token })
-        const user = await api.get('/user')
-        const { errors } = user
-        
-        if(!errors) {
-            this.props.setUserDataLogin(user)
-        } else {
-            console.log({ token: refresh })
-            const api = new Api({token: refresh})
-            const new_token = await api.post('/token')
-            console.log(new_token) // --> end today!
+        const { isLogin } = this.props.persist
+        if(isLogin === false) {
+            this.props.history.push('/')
         }
-        
-
     }
 
     render = (): JSX.Element => {

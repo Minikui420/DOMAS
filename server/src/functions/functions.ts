@@ -1,32 +1,52 @@
 import { UserData, Result, DataResident, Token } from '../interface/interfaces'
 import { Forbidden, NotFound } from '@tsed/exceptions'
+import { Res } from '@tsed/common'
 import { Users } from '../entity/Users'
+import { UsersToken } from '../entity/Token'
 import { hash, compare } from 'bcryptjs'
 import { Resident } from '../entity/Resident'
-import { getConnection } from 'typeorm'
 import { sign, verify } from 'jsonwebtoken'
 import { SECRET_KEY, REFRESH_SECRET_KEY } from '../config/env/index'
+// import { getConnection } from 'typeorm'
 
-
-export const repository = getConnection('default').manager
+// export const repository = getConnection('default').manager
 
 // authentication
 
 export const createAccessToken = (user: UserData): string => {
-    return sign(user, SECRET_KEY!, { expiresIn: '60s' })
+    const { id, username } = user
+    return sign({ id, username }, SECRET_KEY!, { expiresIn: '60s' })
 }
 
 export const refreshAccessToken = (user: UserData): string => {
-    return sign(user, REFRESH_SECRET_KEY!, { expiresIn: '7d' })
+    const { id, username } = user
+    return sign({ id, username }, REFRESH_SECRET_KEY!)
 }
 
-const authValidator = (user: UserData) => {
-    const data = returnData(user)
+const authValidator = async (users: Users) => {
+    const data = returnData(users)
     const token = createAccessToken(data)
     const refreshToken = refreshAccessToken(data)
-    return { ...data, token, refreshToken }
+    try {
+        const isTokenExist = await UsersToken.findOne({ users })
+        if(!isTokenExist) {
+            const userToken = UsersToken.create({
+                refreshToken,
+                users
+            })
+            const result = await userToken.save()
+            return { ...data, token, refreshToken: result.refreshToken }
+        }
+        return { 
+            ...data, 
+            token, 
+            refreshToken: isTokenExist.refreshToken 
+        }
+    } catch (error) {
+        console.log(`${error}`)
+        return { message: `Error!` }
+    }
 }
-
 
 // decorator
 
@@ -36,6 +56,7 @@ export const returnData = (data: UserData): Result => {
         id: data.id,
         username: data.username!,
         admin: data.admin!,
+        picture: data.picture,
         createdAt: data.createdAt!
     }
 }
@@ -67,14 +88,14 @@ export const returnResident = (data: DataResident): DataResident => {
 export const create = async (userData: UserData) => {
     try {
         const { password, username, email, admin } = userData
-        const user: Users = new Users()
         const hased: string = await hash(password!, 10)
-        user.username = username!
-        user.email = email!
-        user.password = hased
-        user.isAdmin = admin!
-        const data: Users = await repository.save(user)
-        return authValidator(data)
+        const user: Users = Users.create({
+            username, email,
+            password: hased,
+            isAdmin: admin
+        })
+        const data: Users = await user.save()
+        return await authValidator(data)
     } catch (error) {
         console.log(error)
         throw new Forbidden('Email already exist...')
@@ -83,22 +104,22 @@ export const create = async (userData: UserData) => {
 
 export const getUser = async (userData: UserData) => {
     const { email, password } = userData
-    const isExist = await repository.findOne(Users, { email })
+    const isExist = await Users.findOne({ email })
     if (!isExist) throw new NotFound(`Email not found!`)
     const isValid: boolean = await compare(password!, isExist.password)
     if (!isValid) throw new Forbidden('Wrong password!')
-    return authValidator(isExist)
+    return await authValidator(isExist)
 }
 
 export const isValidUser = async (token: Token) => {
-    const result = await repository.findOne(Users, { id: token.id })
+    const result = await Users.findOne({ id: token.id })
     return authValidator(result!)
     
 }
 
-export const refreshToken = (refresh: Token) => {
-    const { token } = refresh
-    return verify(token!, REFRESH_SECRET_KEY!, (error, data: UserData) => {
+export const refreshToken = async (refresh: Token) => {
+    const { refreshToken } = refresh
+    return verify(refreshToken!, REFRESH_SECRET_KEY!, (error, data: UserData) => {
         if(error) {
             const res = new Forbidden('Something error...')
             throw { message: res.message, status: res.status }
@@ -111,24 +132,19 @@ export const refreshToken = (refresh: Token) => {
 
 export const createResident = async (dataResident: DataResident) => {
     const {
-        id, kk, nik, name,
+        kk, nik, name,
         place_dateOfBirth, gender,
         bloodType, rt, rw,
         profession, maritalStatus
     } = dataResident
     try {
-        const resident = new Resident()
-        resident.kk = kk!
-        resident.nik = nik!
-        resident.name = name!
-        resident.place_dateOfBirth = place_dateOfBirth!
-        resident.gender = gender!
-        resident.bloodType = bloodType!
-        resident.rt = rt!
-        resident.rw = rw!
-        resident.maritalStatus = maritalStatus!
-        resident.profession = profession!
-        const result: Resident = await repository.save(resident)
+        const resident = Resident.create({
+            kk, nik, name, 
+            place_dateOfBirth, gender,
+            bloodType, rt, rw, maritalStatus,
+            profession
+        })
+        const result: Resident = await resident.save()
         return returnResident(result)
     } catch {
         throw new Forbidden('NIK already exist...')
@@ -137,14 +153,14 @@ export const createResident = async (dataResident: DataResident) => {
 
 export const getResident = async (result: Result) => {
     const { id } = result
-    const isResident = await repository.findOne(Resident, { id })
+    const isResident = await Resident.findOne({ id })
     if (!isResident) throw new NotFound(`Data not found!`)
     return returnResident(isResident)
 }
 
 export const editResident = async (data: DataResident) => {
     const { id } = data
-    const result = await repository.findOne(Resident, { id })
+    const result = await Resident.findOne({ id })
     if(!result) throw new NotFound('Data not found!')
     result.kk = data.kk || result.kk
     result.nik = data.nik || result.nik
@@ -162,6 +178,6 @@ export const editResident = async (data: DataResident) => {
     result.profession = data.profession || result.profession
     result.citizenship = data.citizenship || result.citizenship
     result.validUntil = data.validUntil || result.validUntil
-    await repository.save(result)
+    await Resident.save(result)
     return returnResident(result)
 }

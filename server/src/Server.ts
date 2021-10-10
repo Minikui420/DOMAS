@@ -27,9 +27,13 @@ export class Server {
   $beforeRoutesInit(): void {
     this.app
       .use(cors({ 
+        origin: true,
         credentials: true,
-        origin: 'http://localhost:3000',
-        allowedHeaders: ['Content-Type', 'X-Requested-With']
+        allowedHeaders: [
+          'sessioId', 'Content-Type',
+          'X-Requested-With', 'Authorization', 'Accept', 'Data'
+        ],
+        exposedHeaders: ['*']
       }))
       .use(cookieParser())
       .use(compress({}))
@@ -42,7 +46,7 @@ export class Server {
         secret: "keyboard cat",
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false, sameSite: 'lax' }
+        cookie: { secure: true, sameSite: 'strict' }
       }))
   }
 

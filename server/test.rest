@@ -8,7 +8,7 @@ Content-Type: application/json
     "username": "admin",
     "email": "admin@gmail.com",
     "password": "admin",
-    "admin": true
+    "isAdin": true
 }
 
 
@@ -19,15 +19,15 @@ POST http://0.0.0.0:5000/login
 Content-Type: application/json
 
 {
-    "email": "domas@gmail.com",
-    "password": "123qwe"
+    "email": "admin@gmail.com",
+    "password": "admin"
 }
 
 ###
 
 
-GET http://0.0.0.0:5000/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNzkxNTRmLTFhMmQtNGE5ZS05NDFjLWQyOWIwODI2ZmNjNyIsInVzZXJuYW1lIjoibXVoYWltaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTA5LTMwVDEyOjAwOjEyLjY0NVoiLCJpYXQiOjE2MzMwNzY5ODAsImV4cCI6MTYzMzA3NzA0MH0.j4os6HxJRVIUq4-d1qreV3Z0hOR830kRKuXTkpXpdYA
+GET http://0.0.0.0:5000/home
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmMDYyNmJmLTcxMTgtNGViNC04NjdjLWJlY2E3MThkM2U1NyIsInVzZXJuYW1lIjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA4VDA3OjA5OjAxLjIyNFoiLCJpYXQiOjE2MzM3OTc4NDQsImV4cCI6MTYzMzc5Nzg2NH0.zGhXxazOKXbFCwJRfdGaMUk008OR1_OVHh_4jZxGymk
 
 ###
 
@@ -35,7 +35,7 @@ POST http://0.0.0.0:5000/token
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNzkxNTRmLTFhMmQtNGE5ZS05NDFjLWQyOWIwODI2ZmNjNyIsInVzZXJuYW1lIjoibXVoYWltaW4iLCJjcmVhdGVkQXQiOiIyMDIxLTA5LTMwVDEyOjAwOjEyLjY0NVoiLCJpYXQiOjE2MzMwNzI2NDcsImV4cCI6MTYzMzY3NzQ0N30.0fZRKi1qafIOzwJrn_2MfUbaZLXodlR56J0htULw_dI"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmMDYyNmJmLTcxMTgtNGViNC04NjdjLWJlY2E3MThkM2U1NyIsInVzZXJuYW1lIjoiYWRtaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9iaXQubHkvMld1b0JVUyIsImlzQWRtaW4iOmZhbHNlLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTA4VDA3OjA5OjAxLjIyNFoiLCJpYXQiOjE2MzM3MDIxNDF9.DuFrXiWg_QZHsucjEsYlUYZcY71t8a5JUKmL9ZUzeiU"
 }
 
 ### Resident ###

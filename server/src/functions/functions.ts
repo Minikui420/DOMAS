@@ -1,6 +1,5 @@
 import { UserData, Result, DataResident, Token } from '../interface/interfaces'
 import { Forbidden, NotFound } from '@tsed/exceptions'
-import { Res } from '@tsed/common'
 import { Users } from '../entity/Users'
 import { UsersToken } from '../entity/Token'
 import { hash, compare } from 'bcryptjs'
@@ -14,13 +13,13 @@ import { SECRET_KEY, REFRESH_SECRET_KEY } from '../config/env/index'
 // authentication
 
 export const createAccessToken = (user: UserData): string => {
-    const { id, username } = user
-    return sign({ id, username }, SECRET_KEY!, { expiresIn: '60s' })
+    const { id, username, picture, isAdmin, createdAt } = user
+    return sign({ id, username, picture, isAdmin, createdAt }, SECRET_KEY!, { expiresIn: '20s' })
 }
 
 export const refreshAccessToken = (user: UserData): string => {
-    const { id, username } = user
-    return sign({ id, username }, REFRESH_SECRET_KEY!)
+    const { id, username, picture, isAdmin, createdAt } = user
+    return sign({ id, username, picture, isAdmin, createdAt }, REFRESH_SECRET_KEY!)
 }
 
 const authValidator = async (users: Users) => {
@@ -35,10 +34,9 @@ const authValidator = async (users: Users) => {
                 users
             })
             const result = await userToken.save()
-            return { ...data, token, refreshToken: result.refreshToken }
+            return { token, refreshToken: result.refreshToken }
         }
         return { 
-            ...data, 
             token, 
             refreshToken: isTokenExist.refreshToken 
         }
@@ -51,11 +49,10 @@ const authValidator = async (users: Users) => {
 // decorator
 
 export const returnData = (data: UserData): Result => {
-
     return {
         id: data.id,
         username: data.username!,
-        admin: data.admin!,
+        isAdmin: data.isAdmin!,
         picture: data.picture,
         createdAt: data.createdAt!
     }
@@ -87,12 +84,12 @@ export const returnResident = (data: DataResident): DataResident => {
 
 export const create = async (userData: UserData) => {
     try {
-        const { password, username, email, admin } = userData
+        const { password, username, email, isAdmin } = userData
         const hased: string = await hash(password!, 10)
         const user: Users = Users.create({
             username, email,
             password: hased,
-            isAdmin: admin
+            isAdmin
         })
         const data: Users = await user.save()
         return await authValidator(data)
@@ -124,8 +121,8 @@ export const refreshToken = async (refresh: Token) => {
             const res = new Forbidden('Something error...')
             throw { message: res.message, status: res.status }
         }
-        const { id, username, createdAt } = data
-        const newToken = createAccessToken({ id, username, createdAt })
+        const { id, username, isAdmin, picture, createdAt } = data
+        const newToken = createAccessToken({ id, username, isAdmin, picture, createdAt })
         return { token: newToken }
     })
 }

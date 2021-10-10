@@ -1,41 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { UserData, UserToken } from '../interface/Interfaces'
+import { InitialState } from '../interface/Interfaces'
+
 
 export const hook = createSlice({
 
     name: 'domasApp',
-    initialState: {
-
-        dataToken: {
-            token: '',
-            refreshToken: ''
-        } as UserToken,
-
-        dataLogin: {
-            id: '',
-            admin: false,
-            email: '',
-            username: '',
-            createdAt: ''
-        } as UserData,
-
-        isLogin: false
-    },
+    initialState:{ } as InitialState,
     reducers: {
-        setUserDataToken: (state, actio) => {
-            state.dataToken = actio.payload as UserToken
+        setPath: (state, action) => {
+            state.path = action.payload
+        },
+        setUserDataToken: (state, action) => {
+            state.dataToken = action.payload
         },
         setUserDataLogin: (state, action) => {
-            state.dataLogin = action.payload as UserData
+            state.dataLogin = action.payload
         },
         setIsLogin: (state, action) => {
-            state.isLogin = action.payload as boolean
+            state.isLogin = action.payload
+        },
+        reset: state => {
+            state.dataLogin = {}
+            state.dataToken = {}
+            state.isLogin = false
         }
     }
 })
 
 export const { 
-    setUserDataLogin, setIsLogin, setUserDataToken
+    setUserDataLogin, setIsLogin, setUserDataToken,
+    setPath, reset
  } = hook.actions
 
  export default hook.reducer

@@ -1,14 +1,29 @@
 import { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Props } from './interface/Interfaces'
-import { mapStateToProps } from './app/functions'
+import { Props, State, UserData } from './interface/Interfaces'
+import { cookies, mapStateToProps } from './app/functions'
 import { connect } from 'react-redux'
 import Index from './pages/Index'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import './assets/css/App.css'
+import jwtDecode from 'jwt-decode'
 
-class App extends Component<Props> {
+
+class App extends Component<Props, State> {
+
+  constructor(props: Props){
+    super(props)
+    this.state = {}
+  }
+
+  componentDidMount = () => {
+    const token = cookies.get('token')
+    if(token){
+      const decode: UserData = jwtDecode(token)
+      this.setState({ path: decode.username })
+    }
+  }
   
   render = (): JSX.Element => {
 
@@ -18,7 +33,7 @@ class App extends Component<Props> {
       case '/login':     
         return <Login />
 
-      case '/home':
+      case `/${this.state.path}`:
         return <Home />
     
       default:

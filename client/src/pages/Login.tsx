@@ -3,13 +3,15 @@ import { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Card, Form, Button } from 'react-bootstrap'
 import { Props, State, UserData } from '../interface/Interfaces'
-import { mapStateToProps, mapDispatchToProps } from '../app/functions'
+import { mapStateToProps, mapDispatchToProps, cookies } from '../app/functions'
 import Navigation from '../components/header/Navigation'
 import Api from '../api/Api'
 import '../assets/css/login.css'
+import jwtDecode from 'jwt-decode'
 
 
 class Login extends Component<Props, State> {
+
 
     constructor(readonly props: Props){
         super(props)
@@ -25,20 +27,17 @@ class Login extends Component<Props, State> {
     }
 
     submit = async () => {
-        
         try {
-
             const api = new Api(this.state)
             const userData: UserData = await api.post('/login')
-            const { id, username, picture, createdAt, token, refreshToken } = userData
-            this.props.setUserDataLogin({ id, username, picture, createdAt })
-            this.props.setUserDataToken({ token, refreshToken })
+            const { token, refreshToken } = userData
+            const decode: UserData = jwtDecode(token!)
+            cookies.set('token', token)
+            cookies.set('refreshToken', refreshToken)
             this.props.setIsLogin(true)
-            this.props.history.push('/home')
-            
+            this.props.history.push(`/${decode.username}`)
         } catch (error) {
-            console.log(`${error}`)
-            alert(error)
+            console.log(error)
         }
     }
 
@@ -66,3 +65,4 @@ class Login extends Component<Props, State> {
 
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))
+

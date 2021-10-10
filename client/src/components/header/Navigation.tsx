@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { mapStateToProps, mapDispatchToProps } from '../../app/functions'
+import { mapStateToProps, mapDispatchToProps, cookies } from '../../app/functions'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
@@ -19,11 +19,15 @@ class Navigation extends Component<Props> {
     }
 
     logOut = (): void => {
-        this.props.setIsLogin(false)
+        this.props.reset()
+        cookies.remove('token')
+        cookies.remove('refreshToken')
         this.props.history.push('/')
     }
 
     userLogedIn = (isLogin: boolean): JSX.Element => {
+
+        const { dataLogin } = this.props.persist
 
         return isLogin === false ? 
             <>
@@ -38,7 +42,7 @@ class Navigation extends Component<Props> {
                 </NavDropdown>
             </> :
         <>
-            <Nav.Link>Your profile</Nav.Link>
+            <Nav.Link>{ dataLogin.username }</Nav.Link>
             <Nav.Link>Statistik desa</Nav.Link>
             <Nav.Link onClick={ this.logOut }>Logout</Nav.Link>
         </>
@@ -46,9 +50,7 @@ class Navigation extends Component<Props> {
 
     render = (): JSX.Element => {
 
-        const { isLogin, dataLogin } = this.props.persist
-
-        console.log(dataLogin)
+        const { isLogin } = this.props.persist
 
         return (
             <div className="navigation">

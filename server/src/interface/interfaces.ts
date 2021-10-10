@@ -10,14 +10,14 @@ export interface UserData extends Token {
     username?: string
     email?: string
     password?: string
-    admin?: boolean
+    isAdmin?: boolean
     createdAt?: Date
     updatedAt?: Date
 }
 
 export interface Result extends Token {
     username: string
-    admin: boolean
+    isAdmin: boolean
     createdAt: Date
 }
 

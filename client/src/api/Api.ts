@@ -1,50 +1,43 @@
-import axios from 'axios'
-import { Req } from '../interface/Interfaces'
+import { axiosInstance } from '../app/functions'
+import jwtDecode from 'jwt-decode'
+import { cookies, interceptor } from '../app/functions'
+import { JWTDecode, Req } from '../interface/Interfaces'
+import { AxiosInstance, AxiosResponse } from 'axios'
+
 
 export default class Api {
     
     private req: Req
-    private api = axios.create({
-        baseURL: process.env.REACT_APP_BASE_URL,
-        headers: {
-            "Conttent-Type": "application/json"
-        },
-        withCredentials: true
-    })
-
-    constructor(req: Req){ 
-        this.req = req
+    
+    constructor(req?: Req){ 
+        this.req = req!
     }
 
     get = async (path: string) => {
         try {
-
-            const { id, token } = this.req
-
             switch (path) {
-                case '/user':
-                    const user = await this.api.get(path, { headers: { 'Authorization': `Bearer ${token}` } })
-                    return user.data
-
-                case '/login':
-                    const response = await this.api.get(path, { params: { id } })
+                case '/home':
+                    const userInfo: AxiosResponse = await axiosInstance.get(path) 
+                    return userInfo.data
+                case '/username':
+                    const { id } = this.req
+                    const response: AxiosResponse = await axiosInstance.get(path, { params: { id } })
                     return response.data
-            
                 default:
                     break
             }
-
         } catch (error) {
-            return error.response.data
+            return error.response
         }
     }
     
     post = async (path: string) => {
         try {
-            const response = await this.api.post(path, this.req)
+            const response: AxiosResponse = await axiosInstance.post(path, this.req)
+            console.log(response)
             return response.data
         } catch (error) {
-            return error.response.data
+            return error.response
         }
     }
 }

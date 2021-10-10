@@ -1,5 +1,5 @@
 import {
-  Controller, UseBefore, BodyParams, Res,
+  Controller, UseBefore, BodyParams, Res, Req,
   Delete, Post, Get, Put, QueryParams, UseAfter
 } from "@tsed/common"
 import { UserService } from '../services/UserService'
@@ -7,6 +7,7 @@ import { Status } from "@tsed/schema"
 import { Users } from '../entity/Users'
 import { Token } from '../interface/interfaces'
 import { IsAuth, SetCookies } from '../middleware/Middlewares'
+import { refreshToken } from "src/functions/functions"
 
 
 @Controller('/')
@@ -18,20 +19,20 @@ export class User {
 
   @Post('/login')
   @UseAfter(SetCookies)
-  login(@Res() res: Res, @BodyParams() data: Users): Promise<Users> {
+  login(@BodyParams() data: Users): Promise<Users> {
     return this.userService.getUser(data)
   }
 
-  @Get('/user')
+  @Get('/home')
   @UseBefore(IsAuth)
-  token(@QueryParams() token: Token): Promise<Token> {
-    return this.userService.isValidUser(token)
+  home(@Req() req: Req) {
+    return req.body
   }
 
   @Post('/token')
   @Status(201)
-  refresh(@BodyParams() token: Token){
-    return this.userService.refreshToken(token)
+  refresh(@BodyParams() refreshToken: Token){
+    return this.userService.refreshToken(refreshToken)
   }
 
   @Post('/signup')

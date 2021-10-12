@@ -3,14 +3,31 @@ import { WebStorage } from 'reduxjs-toolkit-persist/es/types'
 import { AxiosInterceptorManager, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 
+export interface KKData {
+    no_kk?: string
+    family_head?: string
+    rt_rw?: string
+    village?: string
+    distric?: string
+    city?: string
+    zip?: string
+    province?: string
+}
+
+export interface Error {
+    response: any
+}
+
 export interface Path {
     path?: string
+    activity?: string
 }
 
 export interface InitialState extends Path {
     dataToken: UserToken
     dataLogin: UserData
     isLogin: boolean
+    kk_data: KKData
 }
 
 export interface PersistConfig {
@@ -32,7 +49,14 @@ export interface Props extends StateToProps, DispatchToProps, RouteComponentProp
  
 }
 
-export interface State extends Path {
+export interface Checked {
+    gender?: string
+    isChecked?: boolean
+    current?: string
+}
+
+
+export interface State extends Path, Checked {
     email?: string
     password?: string
 }
@@ -79,6 +103,7 @@ export interface StoreData extends Path {
     isLogin: boolean
     dataLogin: UserData
     dataToken: UserToken
+    kk_data: KKData
 }
 
 export interface StateToProps {
@@ -89,7 +114,9 @@ export interface StateToProps {
 export interface DispatchToProps {
     setUserDataLogin(args: UserData): UserData
     setUserDataToken(args: UserToken): UserToken
+    setKKData(data: KKData): KKData
     setIsLogin(args: boolean): boolean
     setPath(args: string): string
+    setActivity(args: string): string
     reset(): any
 }

@@ -1,24 +1,26 @@
 import { Component } from "react";
-import { Props, UserData as State } from "../../interface/Interfaces";
+import { Props, UserData as State } from "../../../interface/Interfaces";
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
-import { mapDispatchToProps, mapStateToProps } from "../../app/functions"
+import { mapDispatchToProps, mapStateToProps } from "../../../app/functions"
 import { Card, Table } from "react-bootstrap";
 
 
 class Result extends Component<Props, State> {
     render = () => {
-        const { kk_data } = this.props.temporer
+        const { kk_data, toResult } = this.props.temporer
         console.log(kk_data)
-        return(
+        return toResult === false ?
             <>
                 <Card style={{ backgroundColor: '#dc3545', color: 'whitesmoke' }}>
                     <Card.Body>
                         <Card.Title>Info!</Card.Title>
-                        <Card.Text>Pastikan data sudah benar dan hasil akan ditampilkan di bawah ini</Card.Text>
+                        <Card.Text>Pastikan data sudah benar dan hasil akan ditampilkan di sini</Card.Text>
                     </Card.Body>
                 </Card>
-                <br />
+            </>
+                :
+            <>
                 <Card style={{ backgroundColor: '#33C4FF', color: 'whitesmoke' }}>
                     <h4>Data KK</h4>
                     <hr />
@@ -69,7 +71,6 @@ class Result extends Component<Props, State> {
                     </Table>
                 </Card>
             </>
-        )
     }
 }
 

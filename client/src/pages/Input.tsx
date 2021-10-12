@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from "../app/functions"
 import Navigation from "../components/header/Navigation"
 import OptioButton from '../components/body/OptionButton'
-import InputKtp from "../components/body/InputKtp"
-import InputKk from "../components/body/InputKk"
+import InputKtp from "../components/body/ktp/InputKtp"
+import InputKk from "../components/body/kk/InputKk"
 
 
 

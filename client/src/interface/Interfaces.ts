@@ -14,6 +14,18 @@ export interface KKData {
     province?: string
 }
 
+export interface KTPData {
+    nik?: string
+    name?: string
+    place_dateOfBirth?: string
+    gender?: string
+    bloodType?: string
+    rt?: string
+    tw?: string
+    maritalStastus?: string
+    profession?: string
+}
+
 export interface Error {
     response: any
 }
@@ -21,13 +33,7 @@ export interface Error {
 export interface Path {
     path?: string
     activity?: string
-}
-
-export interface InitialState extends Path {
-    dataToken: UserToken
-    dataLogin: UserData
-    isLogin: boolean
-    kk_data: KKData
+    toResult?: boolean
 }
 
 export interface PersistConfig {
@@ -114,8 +120,9 @@ export interface StateToProps {
 export interface DispatchToProps {
     setUserDataLogin(args: UserData): UserData
     setUserDataToken(args: UserToken): UserToken
-    setKKData(data: KKData): KKData
+    setToResult(args: boolean): boolean
     setIsLogin(args: boolean): boolean
+    setKKData(data: KKData): KKData
     setPath(args: string): string
     setActivity(args: string): string
     reset(): any

@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { InitialState } from '../interface/Interfaces'
+import { StoreData } from '../interface/Interfaces'
 
 
 export const hook = createSlice({
 
     name: 'domasApp',
     initialState:{
+        toResult: false,
         activity: 'KTP',
         kk_data: {
             no_kk: '',
@@ -17,8 +18,11 @@ export const hook = createSlice({
             zip: '42192',
             province: 'BANTEN'
         } 
-    } as InitialState,
+    } as StoreData,
     reducers: {
+        setToResult: (state, action) => {
+            state.toResult = action.payload
+        },
         setKKData: (state, action) => {
             state.kk_data = action.payload
         },
@@ -41,6 +45,7 @@ export const hook = createSlice({
             state.dataLogin = {}
             state.dataToken = {}
             state.isLogin = false
+            state.toResult = false
             state.path = undefined
         }
     }
@@ -48,7 +53,7 @@ export const hook = createSlice({
 
 export const { 
     setUserDataLogin, setIsLogin, setUserDataToken,
-    setPath, setActivity, setKKData, reset
+    setPath, setActivity, setKKData, setToResult, reset
  } = hook.actions
 
  export default hook.reducer

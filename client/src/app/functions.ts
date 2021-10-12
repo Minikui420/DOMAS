@@ -1,6 +1,6 @@
 import { 
     setUserDataLogin, setUserDataToken, setIsLogin,
-    setPath, setActivity, setKKData, reset
+    setPath, setActivity, setKKData, setToResult, reset
 } from './hooks' 
 import { 
     StateToProps, DispatchToProps, UserData, 
@@ -80,6 +80,7 @@ export const mapDispatchToProps = (dispatch: Function): DispatchToProps => {
     return {
         setUserDataLogin: (userData: UserData) => dispatch(setUserDataLogin(userData)),
         setUserDataToken: (userData: UserData) => dispatch(setUserDataToken(userData)),
+        setToResult: (data: boolean) => dispatch(setToResult(data)),
         setKKData: (data: KKData) => dispatch(setKKData(data)),
         setIsLogin: (data: boolean) => dispatch(setIsLogin(data)),
         setPath: (path: string) => dispatch(setPath(path)),

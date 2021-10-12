@@ -1,21 +1,32 @@
 import { Component } from 'react'
-import { mapStateToProps, mapDispatchToProps, cookies } from '../../app/functions'
+import { mapStateToProps, mapDispatchToProps, cookies, cookieDecoder } from '../../app/functions'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { Props, Path } from '../../interface/Interfaces'
+import { Props, UserData, Path } from '../../interface/Interfaces'
 
 
 
-class Navigation extends Component<Props> {
+class Navigation extends Component<Props, UserData> {
     
-    private pathname: string = this.props.location.pathname
     private appName: string = 'DOMAS'
     private path: Path = {
         index: '/',
         login: '/login',
         profil: '/profil',
         info: '/info'
+    }
+
+    constructor(props: Props){
+        super(props)
+        this.state = {}
+    }
+
+    componentDidMount = () => {
+        const decode = cookieDecoder()
+        if(decode){
+            this.setState({ path: decode.username })
+        }
     }
 
     logOut = (): void => {
@@ -28,23 +39,31 @@ class Navigation extends Component<Props> {
     userLogedIn = (isLogin: boolean): JSX.Element => {
 
         const { dataLogin } = this.props.persist
+        const { pathname } = this.props.location
 
         return isLogin === false ? 
             <>
                 <Nav.Link href="/data">Data</Nav.Link>
                 <Nav.Link href= { this.path.info }>Info</Nav.Link>
                 <NavDropdown title="More" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                    <NavDropdown.Item href="">Action</NavDropdown.Item>
+                    <NavDropdown.Item href="">Another action</NavDropdown.Item>
+                    <NavDropdown.Item href="">Something</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item href={ this.path.login }>Login</NavDropdown.Item>
                 </NavDropdown>
             </> :
         <>
             <Nav.Link>{ dataLogin.username }</Nav.Link>
+            <Nav.Link href={`/${this.state.path}`} active={ pathname === `/${this.state.path}` } >Home</Nav.Link>
             <Nav.Link>Statistik desa</Nav.Link>
-            <Nav.Link onClick={ this.logOut }>Logout</Nav.Link>
+            <Nav.Link>Data</Nav.Link>
+            <NavDropdown active={ pathname === `/${this.state.path}/input` } title="Activity" id="basic-nav-dropdown">
+                <NavDropdown.Item href={`/${this.state.path}/input`} >Input Data</NavDropdown.Item>                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                <NavDropdown.Item href="">Value</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={ this.logOut }>Logout</NavDropdown.Item>
+            </NavDropdown>
         </>
     }
 

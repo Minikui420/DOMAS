@@ -20,9 +20,12 @@ class Home extends Component<Props, UserData> {
 
     static getDerivedStateFromProps = async (props: Props, state: UserData) => {
         try {
-            const api = new Api()
-            const home: UserData = await api.get('/home')
-            console.log(home)
+            const token: string = cookies.get('token')
+            if(token){
+                const api = new Api()
+                const home: UserData = await api.get('/home')
+                console.log(home)
+            }
         } catch (error) {
             console.log(error)
         }
@@ -33,11 +36,12 @@ class Home extends Component<Props, UserData> {
         const token: string = cookies.get('token')
         if(isLogin === false || isLogin === undefined) {
             this.props.history.push('/')
+        } else if (token){
+            const decode: UserData = jwtDecode(token)
+            const { id, username, picture, isAdmin, createdAt } = decode
+            this.setState({ id, username, picture, isAdmin, createdAt })
+            this.props.setPath(username!)
         }
-        const decode: UserData = jwtDecode(token)
-        const { id, username, picture, isAdmin, createdAt } = decode
-        this.setState({ id, username, picture, isAdmin, createdAt })
-        this.props.setPath(username!)
     }
 
     action = () => {
@@ -49,7 +53,7 @@ class Home extends Component<Props, UserData> {
         return (
             <>
                 <Navigation />
-                <Container className="index">
+                <Container className="page">
                     <Card>
                         <Card.Body>
                             <Card.Title>Hi, { this.state.username }</Card.Title>

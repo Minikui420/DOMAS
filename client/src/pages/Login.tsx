@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Card, Form, Button } from 'react-bootstrap'
 import { Props, State, UserData } from '../interface/Interfaces'
-import { mapStateToProps, mapDispatchToProps, cookies } from '../app/functions'
+import { mapStateToProps, mapDispatchToProps, cookies, expires } from '../app/functions'
 import Navigation from '../components/header/Navigation'
 import Api from '../api/Api'
 import '../assets/css/login.css'
@@ -11,7 +11,6 @@ import jwtDecode from 'jwt-decode'
 
 
 class Login extends Component<Props, State> {
-
 
     constructor(readonly props: Props){
         super(props)
@@ -26,16 +25,23 @@ class Login extends Component<Props, State> {
         this.setState({ ...this.state, [name]: value })
     }
 
+    setUp = (token: string, refreshToken: string, expires: Date) => {
+        cookies.set('token', token, { expires })
+        cookies.set('refreshToken', refreshToken, { expires })
+        this.props.setIsLogin(true)
+    }
+
     submit = async () => {
         try {
             const api = new Api(this.state)
             const userData: UserData = await api.post('/login')
             const { token, refreshToken } = userData
             const decode: UserData = jwtDecode(token!)
-            cookies.set('token', token)
-            cookies.set('refreshToken', refreshToken)
-            this.props.setIsLogin(true)
-            this.props.history.push(`/${decode.username}`)
+            new Promise(res => {
+                this.props.setPath(decode.username!)
+                res(this.setUp(token!, refreshToken!, expires))
+            })
+            .then(() => this.props.history.push(`/${decode.username}`))
         } catch (error) {
             console.log(error)
         }

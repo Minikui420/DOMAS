@@ -8,6 +8,11 @@ import Navigation from '../components/header/Navigation'
 
 
 class Index extends Component<Props> {
+
+    componentDidMount = () => {
+        
+    }
+
     render = (): JSX.Element => {
         return (
             <>

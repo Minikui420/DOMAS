@@ -1,8 +1,6 @@
 import { axiosInstance } from '../app/functions'
-import jwtDecode from 'jwt-decode'
-import { cookies, interceptor } from '../app/functions'
-import { JWTDecode, Req } from '../interface/Interfaces'
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { Req } from '../interface/Interfaces'
+import { AxiosResponse } from 'axios'
 
 
 export default class Api {
@@ -27,7 +25,7 @@ export default class Api {
                     break
             }
         } catch (error) {
-            return error.response
+            return error
         }
     }
     
@@ -37,7 +35,7 @@ export default class Api {
             console.log(response)
             return response.data
         } catch (error) {
-            return error.response
+            return error
         }
     }
 }

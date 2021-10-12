@@ -6,8 +6,9 @@ import { connect } from 'react-redux'
 import Index from './pages/Index'
 import Login from './pages/Login'
 import Home from './pages/Home'
-import './assets/css/App.css'
+import Input from './pages/Input'
 import jwtDecode from 'jwt-decode'
+import './assets/css/App.css'
 
 
 class App extends Component<Props, State> {
@@ -28,13 +29,17 @@ class App extends Component<Props, State> {
   render = (): JSX.Element => {
 
     const { pathname } = this.props.location
+    const path = this.state.path === undefined ? this.props.persist.path : this.state.path
 
     switch (pathname) {
       case '/login':     
         return <Login />
 
-      case `/${this.state.path}`:
+      case `/${path}`:
         return <Home />
+
+      case `/${path}/input`:
+        return <Input />
     
       default:
         return <Index />   

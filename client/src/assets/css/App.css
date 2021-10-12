@@ -8,14 +8,16 @@
   width: 100%
 }
 
-.navbar {
-  padding: 20px;
+.input h3 {
+  text-align: center
 }
 
-.index {
-  margin-top: 56px;
-  position: absolute;
-  width: 100%;
+.card h4 {
+  text-align: center
+}
+
+.navbar {
+  padding: 20px;
 }
 
 .jumbotron {
@@ -31,4 +33,3 @@
     padding-top: 60px;
   }
 }
-

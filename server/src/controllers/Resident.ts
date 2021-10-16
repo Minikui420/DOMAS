@@ -1,11 +1,12 @@
 import {
     Controller, BodyParams, QueryParams,
-    Delete, Post, Put, Get
+    Delete, Post, Put, Get, UseBefore
 } from "@tsed/common"
 import { ResidentService } from '../services/ResidentService'
 import { Status } from "@tsed/schema"
 import { Resident } from '../entity/Resident'
 import { Result } from "src/interface/interfaces"
+import { IsAuth } from "src/middleware/Middlewares"
 
 
 @Controller('/resident')
@@ -20,6 +21,7 @@ export class Residents {
 
     @Post('/add')
     @Status(201)
+    @UseBefore(IsAuth)
     add(@BodyParams() data: Resident): Promise<Resident> {
         return this.residentService.createResident(data)
     }
@@ -33,7 +35,7 @@ export class Residents {
 
     @Delete('/delete')
     delete() {
-
+        
     }
 
 }

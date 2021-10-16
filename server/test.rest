@@ -51,16 +51,41 @@ POST http://0.0.0.0:5000/resident/add
 Content-Type: application/json
 
 {
-    "familyId": "124",
     "nik": "124",
     "name": "MUHAIMIN",
-    "place_dateOfBirth": "SERANG, 28-02-1995",
+    "birthPlace": "SERANG",
+    "date": "28-02-1995",
     "gender": "L",
     "bloodType": "AB",
+    "address": "",
     "rt": "009",
     "rw": "003",
-    "maritalStatus": "BELUM KAWIN",
-    "profession": "BELUM/TIDAK BEKERJA"
+    "district": "",
+    "village": "",
+    "religion": "",
+    "maritalStatus": "",
+    "profession": "",
+    "citizenship": "",
+    "validUntil": ""
+}
+
+
+###
+
+POST http://0.0.0.0:5000/family/add
+Content-Type: application/json
+
+{
+   "no_kk": "123456",
+   "address": "",
+   "family_head": "KUDA",
+   "rt": "009",
+   "rw": "003",
+   "village": "",
+   "districts": "",
+   "city": "",
+   "zip": "",
+   "province": ""
 }
 
 

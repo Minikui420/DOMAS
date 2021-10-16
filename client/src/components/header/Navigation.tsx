@@ -54,12 +54,12 @@ class Navigation extends Component<Props, UserData> {
                 </NavDropdown>
             </> :
         <>
-            <Nav.Link>{ dataLogin.username }</Nav.Link>
+            <Nav.Link>{ dataLogin!.username }</Nav.Link>
             <Nav.Link href={`/${this.state.path}`} active={ pathname === `/${this.state.path}` } >Home</Nav.Link>
             <Nav.Link>Statistik desa</Nav.Link>
-            <Nav.Link>Data</Nav.Link>
+            <Nav.Link href={`/${this.state.path}/data`} active={ pathname === `/${this.state.path}/data` }>Data</Nav.Link>
             <NavDropdown active={ pathname === `/${this.state.path}/input` } title="Activity" id="basic-nav-dropdown">
-                <NavDropdown.Item href={`/${this.state.path}/input`} >Input Data</NavDropdown.Item>                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                <NavDropdown.Item href={`/${this.state.path}/input`} >Input Data</NavDropdown.Item>
                 <NavDropdown.Item href="">Value</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={ this.logOut }>Logout</NavDropdown.Item>
@@ -78,7 +78,7 @@ class Navigation extends Component<Props, UserData> {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            { this.userLogedIn(isLogin) }
+                            { this.userLogedIn(isLogin!) }
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>

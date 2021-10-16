@@ -4,7 +4,9 @@ import { connection } from '../config/ormconfig'
 import { 
     returnData,  getUser, getResident,
     create, createResident, editResident,
-    isValidUser, refreshToken
+    isValidUser, refreshToken,
+    createFamily,
+    createResidentDetail
 } from '../functions/functions'
 
 
@@ -51,7 +53,7 @@ export const ClientRequest = () => {
                     case 'refreshToken':
                         return refreshToken(data)
 
-                    // Resident
+                    // Resident (KTP)
                     case 'createResident':
                         return createResident(data)
 
@@ -63,6 +65,14 @@ export const ClientRequest = () => {
 
                     case 'isValidUser':
                         return isValidUser(data)
+
+                    // Family (KK)
+                    case 'createFamily':
+                        return createFamily(data)
+
+                    // Family member (MEMBER KK)
+                    case 'createResidentDetail':
+                        return createResidentDetail(data)
 
                     default:
                         break;

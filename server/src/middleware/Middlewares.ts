@@ -1,8 +1,8 @@
-import { Middleware, Req, Res } from "@tsed/common"
-import { Unauthorized } from "@tsed/exceptions"
 import { verify } from "jsonwebtoken"
-import { SECRET_KEY } from "src/config/env"
 import { UserData } from "src/interface/interfaces"
+import { SECRET_KEY } from "src/config/env"
+import { Unauthorized } from "@tsed/exceptions"
+import { Middleware, Req, Res } from "@tsed/common"
 
 
 
@@ -16,7 +16,9 @@ export class IsAuth {
                 const res = new Unauthorized('Invalid token!')
                 throw { message: res.message, status: res.status }
             }
-            req.body = res
+            if(req.method.toLocaleLowerCase() === 'get'){
+                req.body = res
+            }
         })
     }
 }

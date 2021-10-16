@@ -6,6 +6,7 @@ export const hook = createSlice({
 
     name: 'domasApp',
     initialState:{
+        localPath: '',
         toResult: false,
         activity: 'KTP',
         kk_data: {
@@ -20,6 +21,9 @@ export const hook = createSlice({
         } 
     } as StoreData,
     reducers: {
+        setLocalPath: (state, action) => {
+            state.localPath = action.payload
+        },
         setToResult: (state, action) => {
             state.toResult = action.payload
         },
@@ -44,6 +48,7 @@ export const hook = createSlice({
         reset: state => {
             state.dataLogin = {}
             state.dataToken = {}
+            state.localPath = ''
             state.isLogin = false
             state.toResult = false
             state.path = undefined
@@ -53,7 +58,8 @@ export const hook = createSlice({
 
 export const { 
     setUserDataLogin, setIsLogin, setUserDataToken,
-    setPath, setActivity, setKKData, setToResult, reset
+    setPath, setActivity, setKKData, setToResult, reset,
+    setLocalPath
  } = hook.actions
 
  export default hook.reducer

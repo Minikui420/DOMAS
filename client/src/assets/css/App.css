@@ -12,12 +12,20 @@
   text-align: center
 }
 
+.card {
+  margin: 5px
+}
+
 .card h4 {
   text-align: center
 }
 
 .navbar {
   padding: 20px;
+}
+
+.data {
+  margin: 40px 20px;
 }
 
 .jumbotron {
@@ -32,4 +40,36 @@
   .jumbotron {
     padding-top: 60px;
   }
+}
+
+
+/* sidebar */
+.listBar {
+  position: fixed;
+  z-index: 2;
+  margin-top: 55px;
+  background-color: #212529;
+  height: 100%;
+  width: 150px;
+}
+
+.nav a {
+  color: aliceblue;
+}
+
+.nav a:hover {
+  color: whitesmoke;
+  background-color: black;
+}
+
+.menu {
+  margin-left: 150px;
+  padding: 40px 20px;
+}
+
+/* search button */
+.search {
+  width: 70%;
+  margin-top: 40px;
+  display: flex;
 }

@@ -1,13 +1,13 @@
 import { axiosInstance } from '../app/functions'
-import { Req } from '../interface/Interfaces'
+import { Req, KKData } from '../interface/Interfaces'
 import { AxiosResponse } from 'axios'
 
 
 export default class Api {
     
-    private req: Req
+    private req: Req | KKData
     
-    constructor(req?: Req){ 
+    constructor(req?: Req | KKData){ 
         this.req = req!
     }
 
@@ -18,7 +18,7 @@ export default class Api {
                     const userInfo: AxiosResponse = await axiosInstance.get(path) 
                     return userInfo.data
                 case '/username':
-                    const { id } = this.req
+                    const { id } = this.req as Req
                     const response: AxiosResponse = await axiosInstance.get(path, { params: { id } })
                     return response.data
                 default:
@@ -32,7 +32,6 @@ export default class Api {
     post = async (path: string) => {
         try {
             const response: AxiosResponse = await axiosInstance.post(path, this.req)
-            console.log(response)
             return response.data
         } catch (error) {
             return error

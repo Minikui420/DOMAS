@@ -7,6 +7,7 @@ import Index from './pages/Index'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Input from './pages/Input'
+import Data from './pages/Data'
 import jwtDecode from 'jwt-decode'
 import './assets/css/App.css'
 
@@ -40,6 +41,9 @@ class App extends Component<Props, State> {
 
       case `/${path}/input`:
         return <Input />
+
+      case `/${path}/data`:
+        return <Data />
     
       default:
         return <Index />   

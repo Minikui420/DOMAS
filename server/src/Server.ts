@@ -1,11 +1,11 @@
 import { Configuration, Inject } from "@tsed/di"
 import { PlatformApplication } from "@tsed/common"
 import { config } from "./config"
+import methodOverride from "method-override"
+import cookieParser from "cookie-parser"
 import bodyParser from "body-parser"
 import compress from "compression"
-import cookieParser from "cookie-parser"
 import session from "express-session"
-import methodOverride from "method-override"
 import cors from "cors"
 import "@tsed/platform-express" // /!\ keep this import
 import "@tsed/typeorm"

@@ -1,24 +1,24 @@
-import { Entity, Column, OneToOne } from "typeorm"
 import { Model } from "../model/Model"
 import { UsersToken } from './Token'
+import { Entity, Column, OneToOne } from "typeorm"
 
 
 @Entity()
 export class Users extends Model {
 
-    @Column()
+    @Column('character varying')
     username: string
 
-    @Column({ unique: true })
+    @Column({ type: 'character varying', unique: true })
     email: string
 
-    @Column()
+    @Column('character varying')
     password: string
 
-    @Column({ default: false })
+    @Column({ type: 'boolean', default: false })
     isAdmin: boolean
 
-    @Column({ default: 'https://bit.ly/2WuoBUS' })
+    @Column({ type: 'character varying', default: 'https://bit.ly/2WuoBUS' })
     picture: string
 
     @OneToOne(() => UsersToken, token => token.users, { cascade: true })

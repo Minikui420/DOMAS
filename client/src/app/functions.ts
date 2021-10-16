@@ -1,14 +1,15 @@
-import { 
-    setUserDataLogin, setUserDataToken, setIsLogin,
-    setPath, setActivity, setKKData, setToResult, reset
-} from './hooks' 
+import Cookies from 'universal-cookie'
+import jwtDecode from 'jwt-decode'
+import axios, { AxiosInstance } from 'axios'
 import { 
     StateToProps, DispatchToProps, UserData, 
     JWTDecode, DataResponse, KKData 
 } from '../interface/Interfaces'
-import Cookies from 'universal-cookie'
-import jwtDecode from 'jwt-decode'
-import axios, { AxiosInstance } from 'axios'
+import { 
+    setUserDataLogin, setUserDataToken, setIsLogin,
+    setPath, setActivity, setKKData, setToResult, reset,
+    setLocalPath
+} from './hooks' 
 
 
 
@@ -49,7 +50,6 @@ axiosInstance.interceptors.request.use(async config => {
 
 export { axiosInstance }
 
-
 export const interceptor = async () => {
     const refreshToken = cookies.get('refreshToken')
     const getToken = cookies.get('token')
@@ -80,11 +80,12 @@ export const mapDispatchToProps = (dispatch: Function): DispatchToProps => {
     return {
         setUserDataLogin: (userData: UserData) => dispatch(setUserDataLogin(userData)),
         setUserDataToken: (userData: UserData) => dispatch(setUserDataToken(userData)),
+        setLocalPath: (data: string) => dispatch(setLocalPath(data)),
         setToResult: (data: boolean) => dispatch(setToResult(data)),
-        setKKData: (data: KKData) => dispatch(setKKData(data)),
-        setIsLogin: (data: boolean) => dispatch(setIsLogin(data)),
-        setPath: (path: string) => dispatch(setPath(path)),
         setActivity: (data: string) => dispatch(setActivity(data)),
+        setIsLogin: (data: boolean) => dispatch(setIsLogin(data)),
+        setKKData: (data: KKData) => dispatch(setKKData(data)),
+        setPath: (path: string) => dispatch(setPath(path)),
         reset: () => dispatch(reset())
     }
 }

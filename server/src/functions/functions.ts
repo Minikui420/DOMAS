@@ -1,16 +1,18 @@
-import { UserData, Result, DataResident, Token } from '../interface/interfaces'
-import { Forbidden, NotFound } from '@tsed/exceptions'
 import { Users } from '../entity/Users'
-import { UsersToken } from '../entity/Token'
-import { hash, compare } from 'bcryptjs'
 import { Resident } from '../entity/Resident'
+import { UsersToken } from '../entity/Token'
+import { FamilyCard } from '../entity/FamilyCard'
+import { ResidentDetail } from '../entity/ResidentDetail'
 import { sign, verify } from 'jsonwebtoken'
+import { hash, compare } from 'bcryptjs'
+import { Forbidden, NotFound } from '@tsed/exceptions'
 import { SECRET_KEY, REFRESH_SECRET_KEY } from '../config/env/index'
-// import { getConnection } from 'typeorm'
+import { 
+    UserData, Result, DataResident, 
+    Token, DataFamily, DataResidentDetail
+} from '../interface/interfaces'
 
-// export const repository = getConnection('default').manager
 
-// authentication
 
 export const createAccessToken = (user: UserData): string => {
     const { id, username, picture, isAdmin, createdAt } = user
@@ -63,10 +65,10 @@ export const returnResident = (data: DataResident): DataResident => {
         id: data.id,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        kk: data.kk,
         nik: data.nik,
         name: data.name,
-        place_dateOfBirth: data.place_dateOfBirth,
+        birthPlace: data.birthPlace,
+        date: data.date,
         gender: data.gender,
         bloodType: data.bloodType,
         address: data.address,
@@ -82,6 +84,8 @@ export const returnResident = (data: DataResident): DataResident => {
     }
 }
 
+// User
+
 export const create = async (userData: UserData) => {
     try {
         const { password, username, email, isAdmin } = userData
@@ -94,7 +98,7 @@ export const create = async (userData: UserData) => {
         const data: Users = await user.save()
         return await authValidator(data)
     } catch (error) {
-        console.log(error)
+        console.log(`${error}`)
         throw new Forbidden('Email already exist...')
     }
 }
@@ -127,23 +131,96 @@ export const refreshToken = async (refresh: Token) => {
     })
 }
 
+// FamilyCard
+
+const returnFamily = (family: FamilyCard): DataFamily => {
+    return {
+        id: family.id,
+        no_kk: family.no_kk,
+        family_head: family.family_head,
+        rt: family.rt,
+        rw: family.rw,
+        village: family.village,
+        districts: family.districts,
+        city: family.city,
+        zip: family.zip,
+        province: family.province
+    }
+}
+
+export const createFamily = async (dataFamily: DataFamily) => {
+    const { 
+        no_kk, family_head, rt,
+        rw, village, districts,
+        city, zip, province
+    } = dataFamily
+    try {
+        const family = FamilyCard.create({
+            no_kk, family_head, rt,
+            rw, village, districts,
+            city, zip, province
+        })
+        const result: FamilyCard = await family.save()
+        return returnFamily(result)
+    } catch (error) {
+        console.log(`${error}`)
+    }
+
+}
+
+// ResidentDetail
+
+export const createResidentDetail = async (dataResidentDetail: DataResidentDetail) => {
+    const { 
+        id, name, nik, birthPlace,
+        date, gender, religion,
+        education, professionType,
+        maritalStatus, statusInFamily,
+        no_passpor, no_kitas_kitap,
+        fatherName, motherName
+    } = dataResidentDetail
+    try {
+        const familyCard  = await FamilyCard.findOne({ id })
+        const residentDetail = ResidentDetail.create({
+            name, nik, birthPlace,
+            date, gender, religion,
+            education, professionType,
+            maritalStatus, statusInFamily,
+            no_passpor, no_kitas_kitap,
+            fatherName, motherName,
+            familyCard
+        })
+        const result = await residentDetail.save()
+        return result
+    } catch (error) {
+        console.log(`${error}`)
+        throw new Forbidden('Filed to add')
+    }
+}
+
+
+
+
+// Resident (KTP)
+
 export const createResident = async (dataResident: DataResident) => {
     const {
-        kk, nik, name,
-        place_dateOfBirth, gender,
-        bloodType, rt, rw,
-        profession, maritalStatus
+        nik, name, birthPlace, date,
+        gender, bloodType, address, rt, rw,
+        districts, village, religion, maritalStatus,
+        profession, citizenship, validUntil,
     } = dataResident
     try {
         const resident = Resident.create({
-            kk, nik, name, 
-            place_dateOfBirth, gender,
-            bloodType, rt, rw, maritalStatus,
-            profession
+            nik, name, birthPlace, date,
+            gender, bloodType, address, rt, rw,
+            districts, village, religion, maritalStatus,
+            profession, citizenship, validUntil
         })
         const result: Resident = await resident.save()
         return returnResident(result)
-    } catch {
+    } catch(error) {
+        console.log(error)
         throw new Forbidden('NIK already exist...')
     }
 }
@@ -159,10 +236,10 @@ export const editResident = async (data: DataResident) => {
     const { id } = data
     const result = await Resident.findOne({ id })
     if(!result) throw new NotFound('Data not found!')
-    result.kk = data.kk || result.kk
     result.nik = data.nik || result.nik
     result.name = data.name || result.name
-    result.place_dateOfBirth = data.place_dateOfBirth || result.place_dateOfBirth
+    result.birthPlace = data.birthPlace || result.birthPlace
+    result.date = data.date || result.date
     result.gender = data.gender || result.gender
     result.bloodType = data.bloodType || result.bloodType
     result.address = data.address || result.address
